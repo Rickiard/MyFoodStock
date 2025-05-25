@@ -1,7 +1,7 @@
 name: myfoodstock
-description: "A new Flutter project."
+description: "MyFoodStock - Gestão de stock de alimentos e listas de compras"
 publish_to: 'none'
-version: 0.1.0
+version: 1.0.0
 
 environment:
   sdk: ^3.7.0
@@ -9,6 +9,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  shared_preferences: ^2.2.2
+  intl: ^0.19.0
+  uuid: ^4.4.0
 
 dev_dependencies:
   flutter_test:
@@ -17,3 +20,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/
