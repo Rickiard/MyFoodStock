@@ -419,7 +419,7 @@ class _StockScreenState extends State<StockScreen> {
                         ],
                       ),
                     )                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
                     itemCount: _filteredItems.length,
                     itemBuilder: (context, index) {
                       final item = _filteredItems[index];
