@@ -212,94 +212,96 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          // Header com estatísticas
-          Container(
-            color: Colors.blue[700],
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '$completedCount/$totalCount concluídos',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Header com estatísticas
+            Container(
+              color: Colors.blue[700],
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '$completedCount/$totalCount concluídos',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-                    Row(
-                      children: [
-                        const Text(
-                          'Mostrar concluídos',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        Switch(
-                          value: _showCompleted,
-                          onChanged: (value) {
-                            setState(() {
-                              _showCompleted = value;
-                            });
-                          },
-                          activeColor: Colors.white,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                if (totalCount > 0)
-                  LinearProgressIndicator(
-                    value: totalCount > 0 ? completedCount / totalCount : 0,
-                    backgroundColor: Colors.white.withOpacity(0.3),
-                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: filteredItems.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.shopping_cart_outlined,
-                          size: 80,
-                          color: Colors.grey[400],
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          _shoppingItems.isEmpty 
-                              ? 'Lista de compras vazia\nToque no + para adicionar itens' 
-                              : 'Nenhum item para mostrar',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[600],
+                      Row(
+                        children: [
+                          const Text(
+                            'Mostrar concluídos',
+                            style: TextStyle(color: Colors.white),
                           ),
-                        ),
-                      ],
-                    ),
-                  )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: filteredItems.length,
-                    itemBuilder: (context, index) {
-                      final item = filteredItems[index];
-                      return _ShoppingItemCard(
-                        item: item,
-                        onToggleCompleted: () => _toggleCompleted(item),
-                        onEdit: () => _editItem(item),
-                        onDelete: () => _deleteItem(item),
-                        onQuantityChanged: (change) => _updateQuantity(item, change),
-                      );
-                    },
+                          Switch(
+                            value: _showCompleted,
+                            onChanged: (value) {
+                              setState(() {
+                                _showCompleted = value;
+                              });
+                            },
+                            activeColor: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-          ),
-        ],
+                  if (totalCount > 0)
+                    LinearProgressIndicator(
+                      value: totalCount > 0 ? completedCount / totalCount : 0,
+                      backgroundColor: Colors.white.withOpacity(0.3),
+                      valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: filteredItems.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.shopping_cart_outlined,
+                            size: 80,
+                            color: Colors.grey[400],
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            _shoppingItems.isEmpty 
+                                ? 'Lista de compras vazia\nToque no + para adicionar itens' 
+                                : 'Nenhum item para mostrar',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: filteredItems.length,
+                      itemBuilder: (context, index) {
+                        final item = filteredItems[index];
+                        return _ShoppingItemCard(
+                          item: item,
+                          onToggleCompleted: () => _toggleCompleted(item),
+                          onEdit: () => _editItem(item),
+                          onDelete: () => _deleteItem(item),
+                          onQuantityChanged: (change) => _updateQuantity(item, change),
+                        );
+                      },
+                    ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addItem,

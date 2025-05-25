@@ -338,86 +338,87 @@ class _StockScreenState extends State<StockScreen> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          Container(
-            color: Colors.green[700],
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                // Barra de pesquisa
-                TextField(
-                  controller: _searchController,
-                  onChanged: _onSearchChanged,
-                  decoration: InputDecoration(
-                    hintText: 'Pesquisar alimentos...',
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: _searchQuery.isNotEmpty 
-                        ? IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () {
-                              _searchController.clear();
-                              _onSearchChanged('');
-                            },
-                          )
-                        : null,
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide.none,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Container(
+              color: Colors.green[700],
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  // Barra de pesquisa
+                  TextField(
+                    controller: _searchController,
+                    onChanged: _onSearchChanged,
+                    decoration: InputDecoration(
+                      hintText: 'Pesquisar alimentos...',
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: _searchQuery.isNotEmpty 
+                          ? IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                _searchController.clear();
+                                _onSearchChanged('');
+                              },
+                            )
+                          : null,
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                // Filtro por categoria
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      _CategoryChip(
-                        label: 'Todos',
-                        isSelected: _selectedCategory == null,
-                        onTap: () => _onCategoryChanged(null),
-                      ),
-                      ...FoodCategory.values.map(
-                        (category) => _CategoryChip(
-                          label: category.displayName,
-                          isSelected: _selectedCategory == category,
-                          onTap: () => _onCategoryChanged(category),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: _filteredItems.isEmpty
-                ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  const SizedBox(height: 16),
+                  // Filtro por categoria
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
                       children: [
-                        Icon(
-                          Icons.kitchen_outlined,
-                          size: 80,
-                          color: Colors.grey[400],
+                        _CategoryChip(
+                          label: 'Todos',
+                          isSelected: _selectedCategory == null,
+                          onTap: () => _onCategoryChanged(null),
                         ),
-                        const SizedBox(height: 16),
-                        Text(
-                          _allItems.isEmpty 
-                              ? 'Nenhum alimento no stock\nToque no + para adicionar' 
-                              : 'Nenhum resultado encontrado',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[600],
+                        ...FoodCategory.values.map(
+                          (category) => _CategoryChip(
+                            label: category.displayName,
+                            isSelected: _selectedCategory == category,
+                            onTap: () => _onCategoryChanged(category),
                           ),
                         ),
                       ],
                     ),
-                  )                : ListView.builder(
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: _filteredItems.isEmpty
+                  ? Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.kitchen_outlined,
+                            size: 80,
+                            color: Colors.grey[400],
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            _allItems.isEmpty 
+                                ? 'Nenhum alimento no stock\nToque no + para adicionar' 
+                                : 'Nenhum resultado encontrado',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )                : ListView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: _filteredItems.length,
                     itemBuilder: (context, index) {
@@ -425,8 +426,9 @@ class _StockScreenState extends State<StockScreen> {
                       return _buildFoodItemCard(item);
                     },
                   ),
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addItem,

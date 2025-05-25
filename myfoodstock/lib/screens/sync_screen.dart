@@ -209,265 +209,269 @@ class _SyncScreenState extends State<SyncScreen> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Server Status Card
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Server Status Card
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          Icons.wifi,
-                          color: Colors.purple[700],
-                          size: 28,
-                        ),
-                        const SizedBox(width: 12),
-                        const Text(
-                          'Servidor Local',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Container(
-                          width: 12,
-                          height: 12,
-                          decoration: BoxDecoration(
-                            color: _isServerRunning ? Colors.green : Colors.red,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          _isServerRunning ? 'Ativo' : 'Inativo',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: _isServerRunning ? Colors.green : Colors.red,
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (_localIpAddress != null) ...[
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          const Text(
-                            'IP Local: ',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          Expanded(
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.wifi,
+                              color: Colors.purple[700],
+                              size: 28,
+                            ),
+                            const SizedBox(width: 12),
+                            const Text(
+                              'Servidor Local',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Container(
+                              width: 12,
+                              height: 12,
                               decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(8),
+                                color: _isServerRunning ? Colors.green : Colors.red,
+                                shape: BoxShape.circle,
                               ),
-                              child: Text(
-                                '$_localIpAddress:8080',
-                                style: const TextStyle(
-                                  fontFamily: 'monospace',
-                                  fontSize: 16,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              _isServerRunning ? 'Ativo' : 'Inativo',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: _isServerRunning ? Colors.green : Colors.red,
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (_localIpAddress != null) ...[
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              const Text(
+                                'IP Local: ',
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    '$_localIpAddress:8080',
+                                    style: const TextStyle(
+                                      fontFamily: 'monospace',
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: _copyIpToClipboard,
+                                icon: const Icon(Icons.copy),
+                                tooltip: 'Copiar IP',
+                              ),
+                            ],
+                          ),
+                        ],
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: _isLoading ? null : _toggleServer,
+                            icon: _isLoading
+                                ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  )
+                                : Icon(_isServerRunning ? Icons.stop : Icons.play_arrow),
+                            label: Text(_isServerRunning ? 'Parar Servidor' : 'Iniciar Servidor'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: _isServerRunning ? Colors.red : Colors.green,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                
+                // Sync with Peer Card
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.sync,
+                              color: Colors.blue[700],
+                              size: 28,
+                            ),
+                            const SizedBox(width: 12),
+                            const Text(
+                              'Sincronizar com Dispositivo',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],                    ),
+                        const SizedBox(height: 16),
+                        if (_localIpAddress != null) ...[
+                          Row(
+                            children: [
+                              const Text(
+                                'Seu IP: ',
+                                style: TextStyle(fontWeight: FontWeight.w500),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  _localIpAddress!,
+                                  style: TextStyle(
+                                    fontFamily: 'monospace',
+                                    fontSize: 14,
+                                    color: Colors.grey[700],
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: _copyIpToClipboard,
+                                icon: const Icon(Icons.copy, size: 18),
+                                tooltip: 'Copiar seu IP',
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                        TextField(
+                          controller: _ipController,
+                          decoration: const InputDecoration(
+                            labelText: 'IP do dispositivo',
+                            hintText: '192.168.1.100',
+                            border: OutlineInputBorder(),
+                            prefixIcon: Icon(Icons.computer),
+                          ),
+                          keyboardType: TextInputType.numberWithOptions(decimal: true),
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: _isLoading ? null : _syncWithPeer,
+                                icon: const Icon(Icons.sync),
+                                label: const Text('Sincronizar'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue[700],
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
                                 ),
                               ),
                             ),
-                          ),
-                          IconButton(
-                            onPressed: _copyIpToClipboard,
-                            icon: const Icon(Icons.copy),
-                            tooltip: 'Copiar IP',
-                          ),
-                        ],
-                      ),
-                    ],
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: _isLoading ? null : _toggleServer,
-                        icon: _isLoading
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              )
-                            : Icon(_isServerRunning ? Icons.stop : Icons.play_arrow),
-                        label: Text(_isServerRunning ? 'Parar Servidor' : 'Iniciar Servidor'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _isServerRunning ? Colors.red : Colors.green,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            
-            // Sync with Peer Card
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.sync,
-                          color: Colors.blue[700],
-                          size: 28,
-                        ),
-                        const SizedBox(width: 12),
-                        const Text(
-                          'Sincronizar com Dispositivo',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],                    ),
-                    const SizedBox(height: 16),
-                    if (_localIpAddress != null) ...[
-                      Row(
-                        children: [
-                          const Text(
-                            'Seu IP: ',
-                            style: TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                          Expanded(
-                            child: Text(
-                              _localIpAddress!,
-                              style: TextStyle(
-                                fontFamily: 'monospace',
-                                fontSize: 14,
-                                color: Colors.grey[700],
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton.icon(
+                                onPressed: _isLoading ? null : _sendDataToPeer,
+                                icon: const Icon(Icons.send),
+                                label: const Text('Enviar'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.orange[700],
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(vertical: 12),
+                                ),
                               ),
                             ),
-                          ),
-                          IconButton(
-                            onPressed: _copyIpToClipboard,
-                            icon: const Icon(Icons.copy, size: 18),
-                            tooltip: 'Copiar seu IP',
-                            padding: EdgeInsets.zero,
-                            constraints: const BoxConstraints(),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-                    TextField(
-                      controller: _ipController,
-                      decoration: const InputDecoration(
-                        labelText: 'IP do dispositivo',
-                        hintText: '192.168.1.100',
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.computer),
-                      ),
-                      keyboardType: TextInputType.numberWithOptions(decimal: true),
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: _isLoading ? null : _syncWithPeer,
-                            icon: const Icon(Icons.sync),
-                            label: const Text('Sincronizar'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue[700],
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: ElevatedButton.icon(
-                            onPressed: _isLoading ? null : _sendDataToPeer,
-                            icon: const Icon(Icons.send),
-                            label: const Text('Enviar'),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange[700],
-                              foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                            ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 24),
-            
-            // Instructions Card
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+                const SizedBox(height: 24),
+                
+                // Instructions Card
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(
-                          Icons.info_outline,
-                          color: Colors.green[700],
-                          size: 28,
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.info_outline,
+                              color: Colors.green[700],
+                              size: 28,
+                            ),
+                            const SizedBox(width: 12),
+                            const Text(
+                              'Como Usar',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(height: 16),
                         const Text(
-                          'Como Usar',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          '1. Certifique-se de que ambos os dispositivos estão na mesma rede Wi-Fi\n\n'
+                          '2. Inicie o servidor em um dos dispositivos\n\n'
+                          '3. No outro dispositivo, insira o IP mostrado e toque em "Sincronizar"\n\n'
+                          '4. Os dados serão mesclados automaticamente',
+                          style: TextStyle(fontSize: 16, height: 1.5),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      '1. Certifique-se de que ambos os dispositivos estão na mesma rede Wi-Fi\n\n'
-                      '2. Inicie o servidor em um dos dispositivos\n\n'
-                      '3. No outro dispositivo, insira o IP mostrado e toque em "Sincronizar"\n\n'
-                      '4. Os dados serão mesclados automaticamente',
-                      style: TextStyle(fontSize: 16, height: 1.5),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );  }
