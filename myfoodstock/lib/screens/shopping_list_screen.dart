@@ -212,81 +212,84 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header com estatísticas
-            Container(
-              color: Colors.blue[700],
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '$completedCount/$totalCount concluídos',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+      body: Column(
+        children: [
+          // Header com estatísticas
+          Container(
+            color: Colors.blue[700],
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '$completedCount/$totalCount concluídos',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
                       ),
-                      Row(
-                        children: [
-                          const Text(
-                            'Mostrar concluídos',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Switch(
-                            value: _showCompleted,
-                            onChanged: (value) {
-                              setState(() {
-                                _showCompleted = value;
-                              });
-                            },
-                            activeColor: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  if (totalCount > 0)
-                    LinearProgressIndicator(
-                      value: totalCount > 0 ? completedCount / totalCount : 0,
-                      backgroundColor: Colors.white.withOpacity(0.3),
-                      valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
-                ],
-              ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Mostrar concluídos',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Switch(
+                          value: _showCompleted,
+                          onChanged: (value) {
+                            setState(() {
+                              _showCompleted = value;
+                            });
+                          },
+                          activeColor: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                if (totalCount > 0)
+                  LinearProgressIndicator(
+                    value: totalCount > 0 ? completedCount / totalCount : 0,
+                    backgroundColor: Colors.white.withOpacity(0.3),
+                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+              ],
             ),
-            Expanded(
-              child: filteredItems.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.shopping_cart_outlined,
-                            size: 80,
-                            color: Colors.grey[400],
+          ),
+          Expanded(
+            child: filteredItems.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.shopping_cart_outlined,
+                          size: 80,
+                          color: Colors.grey[400],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          _shoppingItems.isEmpty 
+                              ? 'Lista de compras vazia\nToque no + para adicionar itens' 
+                              : 'Nenhum item para mostrar',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[600],
                           ),
-                          const SizedBox(height: 16),
-                          Text(
-                            _shoppingItems.isEmpty 
-                                ? 'Lista de compras vazia\nToque no + para adicionar itens' 
-                                : 'Nenhum item para mostrar',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
+                        ),
+                      ],
+                    ),
+                  )
+                : SafeArea(
+                    top: false,
+                    left: false,
+                    right: false,
+                    child: ListView.builder(
+                      padding: EdgeInsets.fromLTRB(16, 16, 16, MediaQuery.of(context).padding.bottom + 80),
                       itemCount: filteredItems.length,
                       itemBuilder: (context, index) {
                         final item = filteredItems[index];
@@ -299,16 +302,20 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
                         );
                       },
                     ),
-            ),
-          ],
+                  ),
+          ),
+        ],
+      ),
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 16),
+        child: FloatingActionButton(
+          onPressed: _addItem,
+          backgroundColor: Colors.blue[700],
+          foregroundColor: Colors.white,
+          child: const Icon(Icons.add),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addItem,
-        backgroundColor: Colors.blue[700],
-        foregroundColor: Colors.white,
-        child: const Icon(Icons.add),
-      ),
+      resizeToAvoidBottomInset: false,
     );
   }
 }

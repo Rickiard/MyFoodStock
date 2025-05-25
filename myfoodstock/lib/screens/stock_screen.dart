@@ -338,104 +338,112 @@ class _StockScreenState extends State<StockScreen> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              color: Colors.green[700],
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  // Barra de pesquisa
-                  TextField(
-                    controller: _searchController,
-                    onChanged: _onSearchChanged,
-                    decoration: InputDecoration(
-                      hintText: 'Pesquisar alimentos...',
-                      prefixIcon: const Icon(Icons.search),
-                      suffixIcon: _searchQuery.isNotEmpty 
-                          ? IconButton(
-                              icon: const Icon(Icons.clear),
-                              onPressed: () {
-                                _searchController.clear();
-                                _onSearchChanged('');
-                              },
-                            )
-                          : null,
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
+      body: Column(
+        children: [
+          Container(
+            color: Colors.green[700],
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                // Barra de pesquisa
+                TextField(
+                  controller: _searchController,
+                  onChanged: _onSearchChanged,
+                  decoration: InputDecoration(
+                    hintText: 'Pesquisar alimentos...',
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: _searchQuery.isNotEmpty 
+                        ? IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              _searchController.clear();
+                              _onSearchChanged('');
+                            },
+                          )
+                        : null,
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  // Filtro por categoria
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        _CategoryChip(
-                          label: 'Todos',
-                          isSelected: _selectedCategory == null,
-                          onTap: () => _onCategoryChanged(null),
+                ),
+                const SizedBox(height: 16),
+                // Filtro por categoria
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      _CategoryChip(
+                        label: 'Todos',
+                        isSelected: _selectedCategory == null,
+                        onTap: () => _onCategoryChanged(null),
+                      ),
+                      ...FoodCategory.values.map(
+                        (category) => _CategoryChip(
+                          label: category.displayName,
+                          isSelected: _selectedCategory == category,
+                          onTap: () => _onCategoryChanged(category),
                         ),
-                        ...FoodCategory.values.map(
-                          (category) => _CategoryChip(
-                            label: category.displayName,
-                            isSelected: _selectedCategory == category,
-                            onTap: () => _onCategoryChanged(category),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: _filteredItems.isEmpty
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.kitchen_outlined,
+                          size: 80,
+                          color: Colors.grey[400],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          _allItems.isEmpty 
+                              ? 'Nenhum alimento no stock\nToque no + para adicionar' 
+                              : 'Nenhum resultado encontrado',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[600],
                           ),
                         ),
                       ],
                     ),
+                  )
+                : SafeArea(
+                    top: false,
+                    left: false,
+                    right: false,
+                    child: ListView.builder(
+                      padding: EdgeInsets.fromLTRB(16, 16, 16, MediaQuery.of(context).padding.bottom + 80),
+                      itemCount: _filteredItems.length,
+                      itemBuilder: (context, index) {
+                        final item = _filteredItems[index];
+                        return _buildFoodItemCard(item);
+                      },
+                    ),
                   ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: _filteredItems.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.kitchen_outlined,
-                            size: 80,
-                            color: Colors.grey[400],
-                          ),
-                          const SizedBox(height: 16),
-                          Text(
-                            _allItems.isEmpty 
-                                ? 'Nenhum alimento no stock\nToque no + para adicionar' 
-                                : 'Nenhum resultado encontrado',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    )                : ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
-                    itemCount: _filteredItems.length,
-                    itemBuilder: (context, index) {
-                      final item = _filteredItems[index];
-                      return _buildFoodItemCard(item);
-                    },
-                  ),
-            ),
-          ],
+          ),
+        ],
+      ),
+      floatingActionButton: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 16),
+        child: FloatingActionButton(
+          onPressed: _addItem,
+          backgroundColor: Colors.green[700],
+          foregroundColor: Colors.white,
+          child: const Icon(Icons.add),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addItem,
-        backgroundColor: Colors.green[700],
-        foregroundColor: Colors.white,
-        child: const Icon(Icons.add),
-      ),
+      resizeToAvoidBottomInset: false,
     );
   }
 }
