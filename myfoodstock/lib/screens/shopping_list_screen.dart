@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 import '../models/shopping_item.dart';
 import '../models/food_item.dart';
@@ -161,7 +162,6 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
       _loadItems();
     }
   }
-
   @override
   Widget build(BuildContext context) {
     final filteredItems = _filteredItems;
@@ -169,11 +169,18 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
     final totalCount = _shoppingItems.length;
 
     return Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: const Text('Lista de Compras'),
-        backgroundColor: Colors.blue[700],
+        backgroundColor: Colors.blue[700]?.withOpacity(0.95),
         foregroundColor: Colors.white,
         elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+        ),
         actions: [
           PopupMenuButton<String>(
             onSelected: (value) {

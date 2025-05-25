@@ -18,10 +18,11 @@ class _HomeScreenState extends State<HomeScreen> {
     const ShoppingListScreen(),
     const SyncScreen(),
   ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true, // Permite o conteúdo se estender por trás da barra de navegação
+      extendBodyBehindAppBar: true, // Permite o conteúdo se estender por trás da app bar
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,

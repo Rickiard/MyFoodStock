@@ -198,16 +198,21 @@ class _SyncScreenState extends State<SyncScreen> {
       Clipboard.setData(ClipboardData(text: _localIpAddress!));
       _showSnackBar('IP copiado para a área de transferência', Colors.blue);
     }
-  }
-
-  @override
+  }  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: const Text('Sincronização'),
-        backgroundColor: Colors.purple[700],
+        backgroundColor: Colors.purple[700]?.withOpacity(0.95),
         foregroundColor: Colors.white,
         elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

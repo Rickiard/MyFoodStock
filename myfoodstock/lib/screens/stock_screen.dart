@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 import '../models/food_item.dart';
 import '../models/shopping_item.dart';
@@ -328,15 +329,21 @@ class _StockScreenState extends State<StockScreen> {
       ),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: const Text('Stock de Alimentos'),
-        backgroundColor: Colors.green[700],
+        backgroundColor: Colors.green[700]?.withOpacity(0.95),
         foregroundColor: Colors.white,
         elevation: 0,
+        systemOverlayStyle: const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.light,
+        ),
       ),
       body: Column(
         children: [
